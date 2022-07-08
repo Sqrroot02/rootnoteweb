@@ -1,0 +1,19 @@
+.button-front{
+    min-width: 50px;
+    min-height: 50px;
+    background-color: transparent;
+    border-color: transparent;
+    border-radius: 10px;
+    transition: all 0.2s;
+    transition-timing-function: ease-out;
+    padding: 3px;
+    margin: 3px;
+}
+
+.button-front:hover{
+    background-color: #5e5e5e;
+}
+
+.button-icon{
+    padding: 5px;
+}

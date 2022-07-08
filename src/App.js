@@ -1,24 +1,18 @@
-import logo from './logo.svg';
 import './App.css';
+import EditorSpace from "./components/EditorSpace";
+import {useState} from "react";
 
 function App() {
+
+    const [selectedMode, setSelectedMode] = useState()
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="App-header">
+          <div className="head-band">
+            <label className="App-logo">Root Note</label>
+          </div>
+          <EditorSpace/>
+      </div>
+
   );
 }
 
