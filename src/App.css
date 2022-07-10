@@ -1,6 +1,11 @@
 .App {
   text-align: center;
   background-color: #282c34;
+  font-family: "Roboto Light";
+}
+
+*{
+  font-family: "Microsoft JhengHei UI"
 }
 
 .App-logo {

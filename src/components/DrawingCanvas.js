@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import './DrawingCanvas.css'
 import DrawTypes from "./enums/DrawTypes";
 
-const DrawingCanvas = ({strokeColor, drawType}) => {
+const DrawingCanvas = ({strokeColor, drawType, drawSize}) => {
 
     const [isMouseClicked, setMouseClicked] = useState(false);
 
@@ -23,6 +23,7 @@ const DrawingCanvas = ({strokeColor, drawType}) => {
     const indexCanvasRef = useRef(null);
     const indexContextRef = useRef(null);
 
+    // on Color changed
     useEffect(() =>{
         if (contextRef.current === null){
             return;
@@ -34,8 +35,14 @@ const DrawingCanvas = ({strokeColor, drawType}) => {
         previewContextRef.strokeStyle = strokeColor;
         previewContextRef.fillStyle = strokeColor;
 
-    },[strokeColor])
+        contextRef.current.lineWidth = drawSize;
+        previewContextRef.current.lineWidth = drawSize;
+        indexContextRef.current.lineWidth = drawSize;
 
+    },[strokeColor,drawSize])
+
+
+    // init Effect
     useEffect(() =>{
         const canvas = canvasRef.current;
         canvas.width = 1500;
@@ -45,7 +52,7 @@ const DrawingCanvas = ({strokeColor, drawType}) => {
         contextRef.current = context;
         contextRef.current.lineCap = "round";
         contextRef.current.strokeStyle = strokeColor;
-        contextRef.current.lineWidth = 25;
+        contextRef.current.lineWidth = 15;
 
         const prevCanvas = previewCanvasRef.current;
         prevCanvas.width = 1500;
@@ -55,7 +62,7 @@ const DrawingCanvas = ({strokeColor, drawType}) => {
         previewContextRef.current = prevContext;
         previewContextRef.current.lineCap = "round";
         previewContextRef.current.strokeStyle = strokeColor;
-        previewContextRef.current.lineWidth = 25;
+        previewContextRef.current.lineWidth = 15;
 
         const inCanavas = indexCanvasRef.current;
         inCanavas.width = 1500;
@@ -63,7 +70,7 @@ const DrawingCanvas = ({strokeColor, drawType}) => {
 
         const inContext = inCanavas.getContext("2d");
         indexContextRef.current = inContext;
-        indexContextRef.current.lineWidth = 25;
+        indexContextRef.current.lineWidth = 15;
         indexContextRef.current.lineCap = "round";
 
     },[])
@@ -106,8 +113,10 @@ const DrawingCanvas = ({strokeColor, drawType}) => {
             let color = [pixelData[0], pixelData[1], pixelData[2]];
 
             setSelectedIndexColor([color.at(0), color.at(1), color.at(2)]);
+
             let selected = getSameColorsPixels(indexContextRef.current.getImageData(0, 0,1500,1500).data,selectedIndexColor)
             setSelectedShape(selected);
+
             focusShape(selected,contextRef.current.getImageData(0,0,1500,1500),[235, 64, 52])
         }
 
