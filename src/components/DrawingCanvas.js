@@ -73,7 +73,30 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize}) => {
         indexContextRef.current.lineWidth = 15;
         indexContextRef.current.lineCap = "round";
 
+        if (loaded === false){
+            console.log("dd")
+            setLoaded(true);
+            document.body.addEventListener("touchstart", function (e) {
+                if (e.target === canvas) {
+                    e.preventDefault();
+                }
+            }, false);
+            document.body.addEventListener("touchend", function (e) {
+                if (e.target === canvas) {
+                    e.preventDefault();
+                }
+            }, false);
+            document.body.addEventListener("touchmove", function (e) {
+                if (e.target === canvas) {
+                    e.preventDefault();
+                }
+            }, false);
+        }
+
     },[])
+
+    const [loaded, setLoaded] = useState(false)
+
 
     // Mouse Down Handler of the Canvas
     const mouseDownHandler = (params) =>{
