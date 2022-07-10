@@ -227,6 +227,9 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize}) => {
                 onMouseDown={mouseDownHandler}
                 onMouseMove={mouseMoveHandler}
                 onMouseUp={mouseUpHandler}
+                onTouchStart={mouseDownHandler}
+                onTouchMove={mouseMoveHandler}
+                onTouchEnd={mouseUpHandler}
                 ref={canvasRef}
                 id="drawing-canvas"
                 className="drawing-canvas"
