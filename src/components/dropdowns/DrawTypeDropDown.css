@@ -1,0 +1,21 @@
+.popup-box{
+    background-color: #343941;
+    left: 60px;
+    top: 115px;
+    width: auto;
+    position: fixed;
+    cursor: auto;
+    border-radius: 5px;
+    filter: drop-shadow(3px 3px 3px black);
+    visibility: visible;
+    transition: opacity 0.2s;
+    z-index: 55 !important;
+}
+.box{
+    position: relative;
+    width: auto;
+}
+
+.row{
+    float: left;
+}

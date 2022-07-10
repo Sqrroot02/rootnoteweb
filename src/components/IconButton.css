@@ -1,6 +1,9 @@
-.button-front{
-    min-width: 50px;
-    min-height: 50px;
+#button-front{
+    box-sizing: border-box;
+    height: 50px;
+    width: 50px;
+    min-width: 10px;
+    min-height: 10px;
     background-color: transparent;
     border-color: transparent;
     border-radius: 10px;
@@ -8,12 +11,20 @@
     transition-timing-function: ease-out;
     padding: 3px;
     margin: 3px;
+
 }
 
-.button-front:hover{
+#button-front:hover{
     background-color: #5e5e5e;
 }
 
-.button-icon{
+#button-icon{
     padding: 5px;
+}
+
+#text-side{
+
+}
+#flexbox-container{
+
 }

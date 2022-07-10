@@ -1,7 +1,16 @@
 .drawing-canvas{
-    border: 2px solid #282c34;
-    height: 500px;
-    width: 500px;
-    border-radius: 10px;
+    position: absolute;
     padding: 4px;
+    z-index: 2;
 }
+.preview-canvas{
+    position: absolute;
+    padding: 4px;
+    z-index: 1;
+}
+.index-canvas{
+    position: absolute;
+    padding: 4px;
+    z-index: 0;
+}
+

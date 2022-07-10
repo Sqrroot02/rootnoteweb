@@ -1,5 +1,45 @@
 .outer-container{
+    position: relative;
+    display: flex;
+    flex-direction: row;
     background-color: #31353d;
     border-radius: 5px;
     padding: 5px;
+}
+.DrawTypeDropDown{
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    z-index: 5;
+}
+.drop-down.control{
+    min-width: 300px;
+    height: 40px;
+}
+.drop-down.option{
+    min-width: 300px;
+    height: 100px;
+}
+.drop-down{
+    min-width: 300px;
+    height: 100px;
+}
+
+.line-size-input{
+    box-sizing: border-box;
+    width: 50px;
+    height: 20px;
+    vertical-align: center;
+    padding: 12px;
+    margin: 12px;
+    border-radius: 5px;
+    border: 2px solid #343941;
+    background-color: #272c34;
+    color: white;
+}
+.line-size-input:focus{
+    border: 2px solid #5e5e5e;
+}
+.line-size-input:hover{
+    border: 2px solid #5e5e5e;
 }
