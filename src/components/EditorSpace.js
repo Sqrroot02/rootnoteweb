@@ -3,14 +3,16 @@ import DrawingCanvas from "./DrawingCanvas";
 import {useState} from "react";
 import DrawTypes from "./enums/DrawTypes";
 import "./EditorSpace.css"
+import {rgbToHex} from "./helpers/NumberConversion";
 
 
 const EditorSpace = (params) => {
 
     // All Drawing settings saved here:
-    const [drawColor, setDrawColor] = useState("#000000");
+    const [drawColor, setDrawColor] = useState(rgbToHex(0,0,0));
     const [drawType, setDrawType] = useState(DrawTypes.Free);
     const [drawSize, setDrawSize] = useState(5);
+
 
   return(
       <div>

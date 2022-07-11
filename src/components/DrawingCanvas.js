@@ -244,7 +244,6 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize}) => {
         }
         // Makes a Shape moveable
         else if (drawType === DrawTypes.None && selectedShape !== undefined){
-
             previewContextRef.current.clearRect(0,0,1500,1500)
 
             let dx = startX - params.clientX - bounds.left;
@@ -387,8 +386,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize}) => {
                 id="drawing-canvas"
                 className="drawing-canvas"
             />
-            <canvas
-                ref={previewCanvasRef}
+            <canvas ref={previewCanvasRef}
                 id="preview-canvas"
                 className="preview-canvas-canvas"
             />

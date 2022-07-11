@@ -1,10 +1,10 @@
 import "./IconButton.css"
 
-const IconButton = ({icon, onClick, text, className}) =>{
+const IconButton = ({icon, onClick, text, className, children}) =>{
     return(
         <button id="button-front" onClick={onClick} className={className}>
             <div id="flexbox-container">
-                <img src={icon} id="button-icon" />
+                {children}
             </div>
         </button>
     )
