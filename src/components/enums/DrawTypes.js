@@ -2,7 +2,10 @@ const DrawingTypes = {
     None: 'none',
     Rectangle: 'rectangle',
     Free: 'free',
-    Circle: 'circle'
+    Circle: 'circle',
+    Triangle: 'triangle',
+    Arrow: 'arrow',
+    Line: 'line',
 }
 
 export default DrawingTypes

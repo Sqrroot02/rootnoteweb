@@ -2,27 +2,29 @@ import React, {useEffect, useRef, useState} from "react";
 import './DrawingCanvas.css'
 import DrawTypes from "./enums/DrawTypes";
 import Shape from "./models/Shape";
-import {getNodeText} from "@testing-library/react";
+import {hexToRgb} from "./helpers/NumberConversion";
 
-const DrawingCanvas = ({strokeColor, drawType, drawSize}) => {
+const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, canvasWidth, canvasHeight}) => {
 
-    const [isMouseClicked, setMouseClicked] = useState(false);
+    const [isMouseClicked, setMouseClicked] = useState(false); // Save current Mouse Click behavior
 
-    const [startX, setStartX] = useState(0);
-    const [startY, setStartY] = useState(0)
+    const [startX, setStartX] = useState(0); // Start X
+    const [startY, setStartY] = useState(0) // Start Y
 
-    const [colorIndex, setColorIndex] = useState(256);
-    const [selectedIndexColor,setSelectedIndexColor ] = useState([0,0,0])
-    const [selectedShape, setSelectedShape] = useState();
-    const [shapes, setShapes] = useState([]);
+    const [colorIndex, setColorIndex] = useState(256);  // Current shape Index
+    const [selectedIndexColor,setSelectedIndexColor ] = useState([0,0,0])   // Current Index Color
+    const [selectedShape, setSelectedShape] = useState();   // Current selected Shape
+    const [shapes, setShapes] = useState([]); // Shape Collection
 
-    const canvasRef = useRef(null);
+    const [loaded, setLoaded] = useState(false) // Indicates weather the Object has been loaded for the first time for init
+
+    const canvasRef = useRef(null); // first-Layer canvas
     const contextRef = useRef(null);
 
-    const previewCanvasRef = useRef(null);
+    const previewCanvasRef = useRef(null); // secound-Layer canvas
     const previewContextRef = useRef(null);
 
-    const indexCanvasRef = useRef(null);
+    const indexCanvasRef = useRef(null); // third-Layer canvas
     const indexContextRef = useRef(null);
 
     const width = 1500;
@@ -97,10 +99,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize}) => {
                 }
             }, false);
         }
-
     },[])
-
-    const [loaded, setLoaded] = useState(false)
 
 
     // Mouse Down Handler of the Canvas
@@ -136,6 +135,11 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize}) => {
             setStartX(params.clientX - bounds.left)
             previewContextRef.current.beginPath();
         }
+        else if (drawType === DrawTypes.Line){
+            previewContextRef.current.moveTo(params.clientX - bounds.left, params.clientY - bounds.top);
+            setStartY(params.clientY - bounds.top)
+            setStartX(params.clientX - bounds.left)
+        }
         else if (drawType === DrawTypes.None){
             let pixelData = indexContextRef.current.getImageData(params.clientX - bounds.left,params.clientY - bounds.top,1,1).data;
             let color = [pixelData[0], pixelData[1], pixelData[2]];
@@ -150,7 +154,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize}) => {
             setStartX(params.clientX - bounds.left)
 
             if (s !== undefined){
-                focusShape(s.Pixels,contextRef.current.getImageData(0,0,1500,1500),[235, 64, 52])
+                focusShape(s.Pixels,contextRef.current.getImageData(0,0,width,height),[235, 64, 52])
             }
 
         }
@@ -174,7 +178,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize}) => {
             indexContextRef.current.closePath();
         }
         else if (drawType === DrawTypes.Rectangle){
-            previewContextRef.current.clearRect(0,0,1500,1500)
+            previewContextRef.current.clearRect(0,0,width,height)
             contextRef.current.fillRect(startX,startY,endX - startX, endY - startY);
             contextRef.current.closePath();
 
@@ -182,7 +186,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize}) => {
             indexContextRef.current.closePath();
         }
         else if (drawType === DrawTypes.Circle){
-            previewContextRef.current.clearRect(0,0,1500,1500)
+            previewContextRef.current.clearRect(0,0,width,height)
 
             contextRef.current.beginPath();
             contextRef.current.arc(startX, startY, endX-startX, 0, 2 * Math.PI);
@@ -195,13 +199,26 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize}) => {
             indexContextRef.current.fill();
         }
         else if (drawType === DrawTypes.None){
-            previewContextRef.current.clearRect(0,0,1500,1500)
+            previewContextRef.current.clearRect(0,0,width,height)
             redrawMainLayer();
             redrawIndexLayer();
 
             if (selectedShape !== undefined){
                 focusShape(selectedShape.Pixels,contextRef.current.getImageData(0,0,1500,1500),[235, 64, 52])
             }
+        }
+        else if (drawType === DrawTypes.Line){
+            previewContextRef.current.clearRect(0,0,width,height)
+
+            contextRef.current.beginPath();
+            contextRef.current.moveTo(startX - bounds.left, startY- bounds.top);
+            contextRef.current.lineTo(endX,endY);
+            contextRef.current.stroke();
+
+            indexContextRef.current.beginPath();
+            indexContextRef.current.moveTo(startX - bounds.left, startY- bounds.top);
+            indexContextRef.current.lineTo(endX,endY);
+            indexContextRef.current.stroke();
         }
 
         if (drawType !== DrawTypes.None){
@@ -210,7 +227,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize}) => {
 
             let rgb = hexToRGB(colorString);
 
-            let selected = getSameColorsPixels(indexContextRef.current.getImageData(0, 0,1500,1500).data,[rgb.r,rgb.g,rgb.b])
+            let selected = getSameColorsPixels(indexContextRef.current.getImageData(0, 0,width,height).data,[rgb.r,rgb.g,rgb.b])
             shapes.push(Shape(rgb,contextRef.current.strokeStyle,contextRef.current.strokeStyle,selected))
             setColorIndex(colorIndex+1);
         }
@@ -229,26 +246,32 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize}) => {
         if (drawType === DrawTypes.Free) {
             contextRef.current.lineTo(params.clientX - bounds.left, params.clientY - bounds.top);
             contextRef.current.stroke();
-
             indexContextRef.current.lineTo(params.clientX - bounds.left, params.clientY - bounds.top);
             indexContextRef.current.stroke();
         }
         else if (drawType === DrawTypes.Rectangle){
-            previewContextRef.current.clearRect(0,0,1500,1500)
+            previewContextRef.current.clearRect(0,0,width,height)
             previewContextRef.current.fillRect(startX,startY,endX - startX, endY - startY);
         }
         else if (drawType === DrawTypes.Circle){
-            previewContextRef.current.clearRect(0,0,1500,1500)
+            previewContextRef.current.clearRect(0,0,width,height)
             previewContextRef.current.arc(startX, startY, endX-startX, 0, 2 * Math.PI);
             previewContextRef.current.fill();
         }
+        else if (drawType === DrawTypes.Line){
+            previewContextRef.current.clearRect(0,0,width,height)
+            previewContextRef.current.beginPath();
+            previewContextRef.current.moveTo(startX - bounds.left, startY- bounds.top);
+            previewContextRef.current.lineTo(endX,endY);
+            previewContextRef.current.stroke();
+        }
         // Makes a Shape moveable
         else if (drawType === DrawTypes.None && selectedShape !== undefined){
-            previewContextRef.current.clearRect(0,0,1500,1500)
+            previewContextRef.current.clearRect(0,0,width,height)
 
             let dx = startX - params.clientX - bounds.left;
             let dy = startY - params.clientY - bounds.top;
-            let imageData = previewContextRef.current.getImageData(0,0,1500,1500);
+            let imageData = previewContextRef.current.getImageData(0,0,width,height);
             let color = hexToRGB(selectedShape.FillColor);
 
             for (let i = 0; i < selectedShape.Pixels.length; i++) {
@@ -305,13 +328,12 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize}) => {
 
     // Redraws the Main-Interaction Layer
     function redrawMainLayer(){
-        contextRef.current.clearRect(0,0,1500,1500)
+        contextRef.current.clearRect(0,0,width,height)
         let imageData = contextRef.current.getImageData(0,0,1500,1500);
 
         for (let i = 0; i < shapes.length; i++) {
-            let color = hexToRGB(shapes[i].FillColor);
+            let color = hexToRgb(shapes[i].FillColor);
             for (let j = 0; j < shapes[i].Pixels.length; j++) {
-
                 imageData.data[shapes[i].Pixels[j]] = color.r;
                 imageData.data[shapes[i].Pixels[j]+1] = color.g;
                 imageData.data[shapes[i].Pixels[j]+2] = color.b;
@@ -323,13 +345,12 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize}) => {
 
     // Redraws the Index Layer
     function redrawIndexLayer(){
-        indexContextRef.current.clearRect(0,0,1500,1500)
+        indexContextRef.current.clearRect(0,0,width,height)
         let imageData = indexContextRef.current.getImageData(0,0,1500,1500);
 
         for (let i = 0; i < shapes.length; i++) {
             let color = shapes[i].ColorId;
             for (let j = 0; j < shapes[i].Pixels.length; j++) {
-
                 imageData.data[shapes[i].Pixels[j]] = color.r;
                 imageData.data[shapes[i].Pixels[j]+1] = color.g;
                 imageData.data[shapes[i].Pixels[j]+2] = color.b;

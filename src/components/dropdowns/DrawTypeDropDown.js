@@ -56,6 +56,11 @@ const DrawTypeDropDown = ({isOpen, onSelectionChanged}) => {
                     <img src="./icons/square-regular.svg"/>
                 </IconButton>
             </div>
+            <div className="row-three">
+                <IconButton className="row" onClick={event => onSelect(DrawTypes.Line)}>
+                    <img src="./icons/slash-solid.svg"/>
+                </IconButton>
+            </div>
         </div>
       </div>
   )

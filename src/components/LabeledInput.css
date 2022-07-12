@@ -29,10 +29,17 @@
     border: 2px solid #343941;
     background-color: #272c34;
     color: white;
+    transition: all 200ms;
 }
-#input-comp:focus{
-    border: 2px solid #5e5e5e;
-}
+
 #input-comp:hover{
     border: 2px solid #5e5e5e;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+#input-comp:focus{
+    border: 2px solid #5b64e7;
+    outline: none;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
