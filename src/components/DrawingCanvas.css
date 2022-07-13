@@ -4,6 +4,7 @@
     z-index: 2;
     top: 0;
     left: 0;
+    touch-action: none;
 }
 .preview-canvas{
     position: absolute;
@@ -11,6 +12,7 @@
     z-index: 1;
     top: 0;
     left: 0;
+    touch-action: none;
 }
 .index-canvas{
     top: 0;
@@ -19,5 +21,6 @@
     position: absolute;
     padding: 4px;
     z-index: 0;
+    touch-action: none;
 }
 

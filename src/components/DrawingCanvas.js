@@ -62,10 +62,11 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         const context = canvas.getContext("2d");
         contextRef.current = context;
         contextRef.current.lineCap = "round";
+        contextRef.current.lineJoin = "round"
         contextRef.current.strokeStyle = strokeColor;
         contextRef.current.fillStyle = strokeColor;
         contextRef.current.lineWidth = 15;
-        contextRef.current.imageSmoothingEnabled = false
+        //contextRef.current.imageSmoothingEnabled = false
 
         const prevCanvas = previewCanvasRef.current;
         prevCanvas.width = 1500;
@@ -74,10 +75,11 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         const prevContext = prevCanvas.getContext("2d");
         previewContextRef.current = prevContext;
         previewContextRef.current.lineCap = "round";
+        previewContextRef.current.lineJoin = "round"
         previewContextRef.current.strokeStyle = strokeColor;
         previewContextRef.current.fillStyle = strokeColor;
         previewContextRef.current.lineWidth = 15;
-        previewContextRef.current.imageSmoothingEnabled = false
+        //previewContextRef.current.imageSmoothingEnabled = false
 
         const inCanavas = indexCanvasRef.current;
         inCanavas.width = 1500;
@@ -87,7 +89,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         indexContextRef.current = inContext;
         indexContextRef.current.lineWidth = 15;
         indexContextRef.current.lineCap = "round";
-        indexContextRef.current.imageSmoothingEnabled = false
+        indexContextRef.current.lineJoin = "round"
+        //indexContextRef.current.imageSmoothingEnabled = false
 
         if (loaded === false){
 
@@ -376,6 +379,14 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         params.preventDefault();
     }
 
+    const scrollHandler = (params) => {
+        contextRef.current.transform(1.2,0,0,1.2,0,0)
+        indexContextRef.current.transform(1.2,0,0,1.2,0,0)
+
+        redrawMainLayer()
+        redrawIndexLayer()
+    }
+
     // Methode for returning pixel Data of a selected shape
     const getSameColorsPixels = (data,color) =>{
         const founded = [];
@@ -499,6 +510,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
                 onTouchStart={mouseDownHandler}
                 onTouchMove={mouseMoveHandler}
                 onTouchEnd={mouseUpHandler}
+                onScroll={scrollHandler}
                 ref={canvasRef}
                 id="drawing-canvas"
                 className="drawing-canvas"/>
