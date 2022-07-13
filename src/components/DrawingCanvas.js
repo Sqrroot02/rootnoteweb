@@ -104,6 +104,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
     // Mouse Down Handler of the Canvas
     const mouseDownHandler = (params) =>{
         params.preventDefault();
+
         const bounds = canvasRef.current.getBoundingClientRect();
 
         const colorString = "#"+((colorIndex)>>>0).toString(16).slice(-6);
@@ -111,41 +112,43 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         indexContextRef.current.strokeStyle = colorString;
         indexContextRef.current.fillStyle = colorString;
 
+        let pos = getMouseOnCanvas(params)
+
         if (drawType === DrawTypes.Free){
             contextRef.current.beginPath();
-            contextRef.current.moveTo(params.clientX - bounds.left, params.clientY - bounds.top);
-            contextRef.current.lineTo(params.clientX - bounds.left, params.clientY - bounds.top);
+            contextRef.current.moveTo(pos.x, pos.y);
+            contextRef.current.lineTo(pos.x, pos.y);
             contextRef.current.stroke();
 
             // Index Paint Path begin
             indexContextRef.current.beginPath();
-            indexContextRef.current.moveTo(params.clientX - bounds.left, params.clientY - bounds.top);
-            indexContextRef.current.lineTo(params.clientX - bounds.left, params.clientY - bounds.top);
+            indexContextRef.current.moveTo(pos.x, pos.y);
+            indexContextRef.current.lineTo(pos.x, pos.y);
             indexContextRef.current.stroke();
         }
         else if (drawType === DrawTypes.Rectangle){
-            previewContextRef.current.moveTo(params.clientX - bounds.left, params.clientY - bounds.top);
-            setStartY(params.clientY - bounds.top)
-            setStartX(params.clientX - bounds.left)
+            previewContextRef.current.moveTo(pos.x, pos.y);
+            setStartY(pos.y)
+            setStartX(pos.x)
         }
         else if (drawType === DrawTypes.Circle){
-            previewContextRef.current.moveTo(params.clientX - bounds.left, params.clientY - bounds.top);
-            setStartY(params.clientY - bounds.top)
-            setStartX(params.clientX - bounds.left)
+            previewContextRef.current.moveTo(pos.x, pos.y);
+            setStartY(pos.y)
+            setStartX(pos.x)
             previewContextRef.current.beginPath();
         }
         else if (drawType === DrawTypes.Line){
-            previewContextRef.current.moveTo(params.clientX - bounds.left, params.clientY - bounds.top);
-            setStartY(params.clientY - bounds.top)
-            setStartX(params.clientX - bounds.left)
+            previewContextRef.current.moveTo(pos.x, pos.y);
+            setStartY(pos.y)
+            setStartX(pos.x)
         }
         else if (drawType === DrawTypes.Arrow){
-            previewContextRef.current.moveTo(params.clientX - bounds.left, params.clientY - bounds.top);
-            setStartY(params.clientY - bounds.top)
-            setStartX(params.clientX - bounds.left)
+            previewContextRef.current.moveTo(pos.x, pos.y);
+            setStartY(pos.y)
+            setStartX(pos.x)
         }
         else if (drawType === DrawTypes.None){
-            let pixelData = indexContextRef.current.getImageData(params.clientX - bounds.left,params.clientY - bounds.top,1,1).data;
+            let pixelData = indexContextRef.current.getImageData(pos.x, pos.y,1,1).data;
             let color = [pixelData[0], pixelData[1], pixelData[2]];
 
             console.log(color)
@@ -160,8 +163,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
             let s = shapes.find(x => x.ColorId.r === color[0] && x.ColorId.g === color[1] && x.ColorId.b === color[2]);
             setSelectedShape(s);
 
-            setStartY(params.clientY - bounds.top)
-            setStartX(params.clientX - bounds.left)
+            setStartY(pos.y)
+            setStartX(pos.x)
 
             if (s === undefined){
                 return;
@@ -180,8 +183,9 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         setMouseClicked(false);
 
         const bounds = canvasRef.current.getBoundingClientRect();
-        let endX = params.clientX - bounds.left;
-        let endY = params.clientY - bounds.top;
+        let pos = getMouseOnCanvas(params)
+        let endX = pos.x;
+        let endY = pos.y
 
         if (drawType === DrawTypes.Free){
             contextRef.current.closePath();
@@ -254,8 +258,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         else if (drawType === DrawTypes.None && selectedShape !== undefined){
             previewContextRef.current.clearRect(0,0,width,height)
 
-            let dx = startX - params.clientX - bounds.left;
-            let dy = startY - params.clientY - bounds.top;
+            let dx = startX - pos.x;
+            let dy = startY - pos.y;
             for (let i = 0; i < selectedShape.Pixels.length; i++) {
                 let j = selectedShape.Pixels[i];
                 let curX = getColIndex(j);
@@ -288,17 +292,21 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
     // Mouse Move Handler of the Canvas
     const mouseMoveHandler = (params) => {
         params.preventDefault();
+
         if (!isMouseClicked){
             return
         }
         const bounds = canvasRef.current.getBoundingClientRect();
-        let endX = params.clientX - bounds.left;
-        let endY = params.clientY - bounds.top;
+
+        let pos = getMouseOnCanvas(params)
+
+        let endX = pos.x
+        let endY = pos.y
 
         if (drawType === DrawTypes.Free) {
-            contextRef.current.lineTo(params.clientX - bounds.left, params.clientY - bounds.top);
+            contextRef.current.lineTo(pos.x, pos.y);
             contextRef.current.stroke();
-            indexContextRef.current.lineTo(params.clientX - bounds.left, params.clientY - bounds.top);
+            indexContextRef.current.lineTo(pos.x, pos.y);
             indexContextRef.current.stroke();
         }
         else if (drawType === DrawTypes.Rectangle){
@@ -342,8 +350,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         else if (drawType === DrawTypes.None && selectedShape !== undefined){
             previewContextRef.current.clearRect(0,0,width,height)
 
-            let dx = startX - params.clientX - bounds.left;
-            let dy = startY - params.clientY - bounds.top;
+            let dx = startX - pos.x;
+            let dy = startY - pos.y;
 
             let imageData = previewContextRef.current.getImageData(0,0,width,height);
             let color = hexToRGB(selectedShape.FillColor);
@@ -484,6 +492,14 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         let g = parseInt(aRgbHex[1],16);
         let b = parseInt(aRgbHex[2], 16);
         return({r,g,b});
+    }
+
+    function getMouseOnCanvas(params){
+        const boundX = params.clientX || params.touches[0].clientX
+        const boundY = params.clientY || params.touches[0].clientY
+        const x = boundX - params.target.offsetLeft
+        const y = boundY - params.target.offsetTop
+        return{x, y}
     }
 
 
