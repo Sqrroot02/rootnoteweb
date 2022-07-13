@@ -95,21 +95,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         if (loaded === false){
 
             setLoaded(true);
-            document.body.addEventListener("ontouchstart", function (e) {
-                if (e.target === canvas) {
-                    e.preventDefault();
-                }
-            }, false);
-            document.body.addEventListener("ontouchend", function (e) {
-                if (e.target === canvas) {
-                    e.preventDefault();
-                }
-            }, false);
-            document.body.addEventListener("ontouchmove", function (e) {
-                if (e.target === canvas) {
-                    e.preventDefault();
-                }
-            }, false);
+
         }
 
     },[])
