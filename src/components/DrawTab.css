@@ -28,7 +28,7 @@
 .line-size-input{
     box-sizing: border-box;
     margin: 5px;
-    width: 190px;
+    width: 140px;
     height: 50px;
     display: flex;
     flex-direction: row;

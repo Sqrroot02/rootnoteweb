@@ -2,13 +2,19 @@
     position: absolute;
     padding: 4px;
     z-index: 2;
+    top: 0;
+    left: 0;
 }
 .preview-canvas{
     position: absolute;
     padding: 4px;
     z-index: 1;
+    top: 0;
+    left: 0;
 }
 .index-canvas{
+    top: 0;
+    left: 0;
     position: absolute;
     padding: 4px;
     z-index: 0;

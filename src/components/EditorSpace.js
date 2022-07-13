@@ -9,9 +9,9 @@ import {rgbToHex} from "./helpers/NumberConversion";
 const EditorSpace = (params) => {
 
     // All Drawing settings saved here:
-    const [drawColor, setDrawColor] = useState(rgbToHex(0,0,0));
+    const [drawColor, setDrawColor] = useState(rgbToHex(255,255,255));
     const [drawType, setDrawType] = useState(DrawTypes.Free);
-    const [drawSize, setDrawSize] = useState(5);
+    const [drawSize, setDrawSize] = useState(15);
 
 
   return(

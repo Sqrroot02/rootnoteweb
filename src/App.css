@@ -44,16 +44,19 @@
   color: white;
 
 }
-
-.App-link {
-  color: #61dafb;
+::-webkit-scrollbar{
+  width: 10px;
+  background-color: #5e5e5e;
+}
+::-webkit-scrollbar-track {
+  background: #343941;
+}
+::-webkit-scrollbar-thumb {
+  background: #b2c7d3;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #6d7785;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+

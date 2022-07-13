@@ -24,7 +24,8 @@
     box-sizing: border-box;
     vertical-align: center;
     padding: 5px;
-    margin: 12px;
+    margin-right: 5px;
+    margin-left: 10px;
     border-radius: 5px;
     border: 2px solid #343941;
     background-color: #272c34;
