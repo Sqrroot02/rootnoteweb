@@ -3,6 +3,8 @@ import './DrawingCanvas.css'
 import DrawTypes from "./enums/DrawTypes";
 import Shape from "./models/Shape";
 import {hexToRgb} from "./helpers/NumberConversion";
+import Vector from "./helpers/Vector";
+import {addVector, changeVectorLenght, degToRad, rotateVector} from "./helpers/VectorHelper";
 
 const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, canvasWidth, canvasHeight}) => {
 
@@ -29,6 +31,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
     const indexCanvasRef = useRef(null); // third-Layer canvas
     const indexContextRef = useRef(null);
 
+    const arrowAngle = 35;
+
 
     // on Color changed
     useEffect(() =>{
@@ -39,8 +43,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         contextRef.current.strokeStyle = strokeColor;
         contextRef.current.fillStyle = strokeColor;
 
-        previewContextRef.strokeStyle = strokeColor;
-        previewContextRef.fillStyle = strokeColor;
+        previewContextRef.current.strokeStyle = strokeColor;
+        previewContextRef.current.fillStyle = strokeColor;
 
         contextRef.current.lineWidth = drawSize;
         previewContextRef.current.lineWidth = drawSize;
@@ -59,7 +63,9 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         contextRef.current = context;
         contextRef.current.lineCap = "round";
         contextRef.current.strokeStyle = strokeColor;
+        contextRef.current.fillStyle = strokeColor;
         contextRef.current.lineWidth = 15;
+        contextRef.current.imageSmoothingEnabled = false
 
         const prevCanvas = previewCanvasRef.current;
         prevCanvas.width = 1500;
@@ -69,7 +75,9 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         previewContextRef.current = prevContext;
         previewContextRef.current.lineCap = "round";
         previewContextRef.current.strokeStyle = strokeColor;
+        previewContextRef.current.fillStyle = strokeColor;
         previewContextRef.current.lineWidth = 15;
+        previewContextRef.current.imageSmoothingEnabled = false
 
         const inCanavas = indexCanvasRef.current;
         inCanavas.width = 1500;
@@ -79,21 +87,22 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         indexContextRef.current = inContext;
         indexContextRef.current.lineWidth = 15;
         indexContextRef.current.lineCap = "round";
+        indexContextRef.current.imageSmoothingEnabled = false
 
         if (loaded === false){
 
             setLoaded(true);
-            document.body.addEventListener("touchstart", function (e) {
+            document.body.addEventListener("ontouchstart", function (e) {
                 if (e.target === canvas) {
                     e.preventDefault();
                 }
             }, false);
-            document.body.addEventListener("touchend", function (e) {
+            document.body.addEventListener("ontouchend", function (e) {
                 if (e.target === canvas) {
                     e.preventDefault();
                 }
             }, false);
-            document.body.addEventListener("touchmove", function (e) {
+            document.body.addEventListener("ontouchmove", function (e) {
                 if (e.target === canvas) {
                     e.preventDefault();
                 }
@@ -150,14 +159,14 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
             let pixelData = indexContextRef.current.getImageData(params.clientX - bounds.left,params.clientY - bounds.top,1,1).data;
             let color = [pixelData[0], pixelData[1], pixelData[2]];
 
+            console.log(color)
             if (color[0] === 0 && color[1] === 0 && color[2] === 0){
                 if (selectedShape !== undefined){
-                    removeFocusShape(selectedShape);
+                    removeFocusShape(selectedShape,contextRef.current.getImageData(0,0,width,height));
                     setSelectedShape(undefined);
                 }
                 return;
             }
-            console.log(color)
 
             let s = shapes.find(x => x.ColorId.r === color[0] && x.ColorId.g === color[1] && x.ColorId.b === color[2]);
             setSelectedShape(s);
@@ -169,7 +178,6 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
                 return;
             }
             focusShape(s.Pixels,contextRef.current.getImageData(0,0,width,height),hexToRgb(s.FillColor))
-            console.log(selectedShape)
         }
 
         setMouseClicked(true);
@@ -224,6 +232,36 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
             indexContextRef.current.lineTo(endX,endY);
             indexContextRef.current.stroke();
         }
+        else if (drawType === DrawTypes.Arrow){
+            previewContextRef.current.clearRect(0,0,width,height)
+
+            contextRef.current.beginPath();
+            contextRef.current.moveTo(startX - bounds.left, startY- bounds.top);
+            contextRef.current.lineTo(endX,endY);
+
+            let vec = Vector(startX-endX, startY - endY);
+            let vecLeft = rotateVector(vec,degToRad(arrowAngle));
+            let vecRight = rotateVector(vec,-degToRad(arrowAngle));
+
+            let vecEndLeft = addVector(Vector(endX,endY),changeVectorLenght(vecLeft, 50))
+            let vecEndRight = addVector(Vector(endX,endY),changeVectorLenght(vecRight,50))
+
+            contextRef.current.moveTo(endX - bounds.left, endY- bounds.top);
+            contextRef.current.lineTo(vecEndLeft.x,vecEndLeft.y);
+            contextRef.current.moveTo(endX - bounds.left, endY- bounds.top);
+            contextRef.current.lineTo(vecEndRight.x, vecEndRight.y);
+            contextRef.current.stroke();
+
+            indexContextRef.current.beginPath();
+            indexContextRef.current.moveTo(startX - bounds.left, startY- bounds.top);
+            indexContextRef.current.lineTo(endX,endY);
+
+            indexContextRef.current.moveTo(endX - bounds.left, endY- bounds.top);
+            indexContextRef.current.lineTo(vecEndLeft.x,vecEndLeft.y);
+            indexContextRef.current.moveTo(endX - bounds.left, endY- bounds.top);
+            indexContextRef.current.lineTo(vecEndRight.x, vecEndRight.y);
+            indexContextRef.current.stroke();
+        }
         else if (drawType === DrawTypes.None && selectedShape !== undefined){
             previewContextRef.current.clearRect(0,0,width,height)
 
@@ -242,7 +280,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
             redrawIndexLayer();
 
             if (selectedShape !== undefined){
-                focusShape(selectedShape.Pixels,contextRef.current.getImageData(0,0,width,height),hexToRgb(selectedShape.FillColor))
+                focusShape(selectedShape,contextRef.current.getImageData(0,0,width,height))
             }
         }
 
@@ -295,6 +333,20 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
             previewContextRef.current.beginPath();
             previewContextRef.current.moveTo(startX - bounds.left, startY- bounds.top);
             previewContextRef.current.lineTo(endX,endY);
+
+            let vec = Vector(startX-endX, startY - endY);
+            let vecLeft = rotateVector(vec,degToRad(arrowAngle));
+            let vecRight = rotateVector(vec,-degToRad(arrowAngle));
+
+            let vecEndLeft = addVector(Vector(endX,endY),changeVectorLenght(vecLeft, 50))
+            let vecEndRight = addVector(Vector(endX,endY),changeVectorLenght(vecRight,50))
+
+            previewContextRef.current.moveTo(endX - bounds.left, endY- bounds.top);
+            previewContextRef.current.lineTo(vecEndLeft.x,vecEndLeft.y);
+            previewContextRef.current.moveTo(endX - bounds.left, endY- bounds.top);
+            previewContextRef.current.lineTo(vecEndRight.x, vecEndRight.y);
+
+            previewContextRef.current.stroke();
 
         }
         // Makes a Shape moveable
@@ -355,8 +407,11 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         contextRef.current.putImageData(imageData,0,0)
     }
 
-    const removeFocusShape = (indexData, imageData,color) => {
+    const removeFocusShape = (shape, imageData) => {
         const data = imageData.data;
+        const indexData = shape.Pixels;
+        const color = hexToRgb(shape.FillColor);
+
         for (let i = 0; i < indexData.length; i++) {
             data[indexData[i]] = color.r
             data[indexData[i]+1] = color.g

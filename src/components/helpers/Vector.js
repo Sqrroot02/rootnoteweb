@@ -1,15 +1,8 @@
 const Vector = (xValue,yValue) => {
-  const [x, setX] = xValue;
-  const [y, setY] = yValue;
-  
-  function unify() {
-      let lenghtV = getLength();
-      return Vector(x / lenghtV, y/lenghtV)
-  }
+  const x = xValue;
+  const y = yValue;
 
-  function getLength(){
-    return Math.sqrt(x*x+y*y);
-  }
+  return {x,y}
 }
 
 export default Vector

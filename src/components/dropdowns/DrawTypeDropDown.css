@@ -14,8 +14,23 @@
 .box{
     position: relative;
     width: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .row{
     float: left;
+}
+.seperator-box{
+    margin: 5px;
+    width: inherit;
+    height: 20px;
+    border-radius: 5px;
+    background-color: #282c34;
+    display: flex;
+    align-items: center;
+}
+.seperator-title{
+    font-size: 10px;
+    margin-left: 5px;
 }

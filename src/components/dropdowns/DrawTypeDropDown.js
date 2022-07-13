@@ -40,6 +40,9 @@ const DrawTypeDropDown = ({isOpen, onSelectionChanged}) => {
   return(
       <div className="popup-box" style={{visibility: open, opacity: opacity }} onMouseLeave={onMouseLeave}>
         <div className="box">
+            <div className="seperator-box">
+                <p className="seperator-title">Tools</p>
+            </div>
             <div className="row-one">
                 <IconButton className="row" onClick={event => onSelect(DrawTypes.Free)}>
                     <img src="./icons/pen-solid.svg"/>
@@ -47,6 +50,9 @@ const DrawTypeDropDown = ({isOpen, onSelectionChanged}) => {
                 <IconButton className="row" icon="./icons/hand-solid.svg" onClick={event => onSelect(DrawTypes.None)}>
                     <img src="./icons/hand-solid.svg"/>
                 </IconButton>
+            </div>
+            <div className="seperator-box">
+                <p className="seperator-title">Shapes</p>
             </div>
             <div className="row-two">
                 <IconButton className="row" onClick={event => onSelect(DrawTypes.Circle)}>
@@ -56,9 +62,15 @@ const DrawTypeDropDown = ({isOpen, onSelectionChanged}) => {
                     <img src="./icons/square-regular.svg"/>
                 </IconButton>
             </div>
+            <div className="seperator-box">
+                <p className="seperator-title">Lines</p>
+            </div>
             <div className="row-three">
                 <IconButton className="row" onClick={event => onSelect(DrawTypes.Line)}>
                     <img src="./icons/slash-solid.svg"/>
+                </IconButton>
+                <IconButton className="row" onClick={event => onSelect(DrawTypes.Arrow)}>
+                    <img src="./icons/right-long-solid.svg"/>
                 </IconButton>
             </div>
         </div>
