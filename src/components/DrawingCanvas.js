@@ -8,7 +8,7 @@ import {
     DrawArrow,
     DrawCircle,
     DrawLine,
-    DrawRectangle, FillPixels, getBorderPixels,
+    DrawRectangle, DrawTriangle, FillPixels, getBorderPixels,
     getColIndex,
     getDestinationArrayIndex,
     getRowIndex
@@ -74,6 +74,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         contextRef.current.strokeStyle = strokeColor;
         contextRef.current.fillStyle = strokeColor;
         contextRef.current.lineWidth = 15;
+        contextRef.current.imageSmoothingEnabled = true;
+        contextRef.current.translate(0.5,0.5);
 
         const prevCanvas = previewCanvasRef.current;
         prevCanvas.width = 1500;
@@ -86,6 +88,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         previewContextRef.current.strokeStyle = strokeColor;
         previewContextRef.current.fillStyle = strokeColor;
         previewContextRef.current.lineWidth = 15;
+        previewContextRef.current.imageSmoothingEnabled = true;
+        previewContextRef.current.translate(0.5,0.5);
 
         const inCanavas = indexCanvasRef.current;
         inCanavas.width = 1500;
@@ -96,6 +100,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         indexContextRef.current.lineWidth = 15;
         indexContextRef.current.lineCap = "round";
         indexContextRef.current.lineJoin = "round"
+        indexContextRef.current.imageSmoothingEnabled = true;
+        indexContextRef.current.translate(0.5,0.5);
 
         if (loaded === false){
             setLoaded(true);
@@ -144,11 +150,13 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         else if (drawType === DrawTypes.Arrow){
             previewContextRef.current.moveTo(pos.x, pos.y);
         }
+        else if (drawType === DrawTypes.Triangle){
+            previewContextRef.current.moveTo(pos.x, pos.y);
+        }
         else if (drawType === DrawTypes.None){
             let pixelData = indexContextRef.current.getImageData(pos.x, pos.y,1,1).data;
             let color = [pixelData[0], pixelData[1], pixelData[2]];
 
-            console.log(color)
             if (color[0] === 0 && color[1] === 0 && color[2] === 0){
                 if (selectedShape !== undefined){
                     removeFocusShape(selectedShape,contextRef.current.getImageData(0,0,width,height));
@@ -205,6 +213,10 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
             DrawArrow(contextRef,startX-bounds.left,startY-bounds.top,endX,endY,arrowAngle,50)
             DrawArrow(indexContextRef,startX-bounds.left,startY-bounds.top,endX,endY,arrowAngle,50)
         }
+        else if (drawType === DrawTypes.Triangle){
+            DrawTriangle(contextRef,startX-bounds.left,startY-bounds.top,endX,endY);
+            DrawTriangle(indexContextRef,startX-bounds.left,startY-bounds.top,endX,endY);
+        }
         else if (drawType === DrawTypes.None && selectedShape !== undefined){
             let dx = startX - pos.x;
             let dy = startY - pos.y;
@@ -218,16 +230,17 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
                 selectedShape.Pixels[i] = newIndex
             }
 
+            let test = getBorderPixels(selectedShape.Pixels,previewContextRef.current.getImageData(0,0,width,height).data,2,width);
+
             redrawMainLayer();
             redrawIndexLayer();
 
-            let lel = getBorderPixels(selectedShape.Pixels, previewContextRef.current.getImageData(0,0,width,height).data,5,width);
             if (selectedShape !== undefined){
-                focusShape(selectedShape,contextRef.current.getImageData(0,0,width,height),hexToRgb(selectedShape.FillColor))
+                //focusShape(selectedShape,contextRef.current.getImageData(0,0,width,height),hexToRgb(selectedShape.FillColor))
             }
 
+            FillPixels(hexToRgb("#8530c9"),test,contextRef);
             previewContextRef.current.clearRect(0,0,width,height)
-            FillPixels(hexToRgb("#d6ac38"),lel,contextRef);
         }
 
         if (drawType !== DrawTypes.None){
@@ -282,6 +295,10 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         else if (drawType === DrawTypes.Arrow){
             previewContextRef.current.clearRect(0,0,width,height)
             DrawArrow(previewContextRef,startX - bounds.left,startY-bounds.top,endX,endY,arrowAngle,50)
+        }
+        else if (drawType === DrawTypes.Triangle){
+            previewContextRef.current.clearRect(0,0,width,height)
+            DrawTriangle(previewContextRef,startX- bounds.left,startY-bounds.top,endX,endY);
         }
         // Makes a Shape moveable
         else if (drawType === DrawTypes.None && selectedShape !== undefined){

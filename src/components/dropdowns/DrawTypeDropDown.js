@@ -11,10 +11,9 @@ const DrawTypeDropDown = ({isOpen, onSelectionChanged}) => {
     const [open, setOpen] = useState("visible");
 
     useEffect(() =>{
-        if (open === "collapse"){
+        if (isOpen === true){
             setOpen("visible");
             setOpacity(1);
-            console.log("xxx")
         }
         else {
             setOpen("collapse")
@@ -60,6 +59,9 @@ const DrawTypeDropDown = ({isOpen, onSelectionChanged}) => {
                 </IconButton>
                 <IconButton className="row" onClick={event => onSelect(DrawTypes.Rectangle)}>
                     <img src="./icons/square-regular.svg"/>
+                </IconButton>
+                <IconButton className="row" onClick={event => onSelect(DrawTypes.Triangle)}>
+                    <img src="./icons/triangle-solid.svg"/>
                 </IconButton>
             </div>
             <div className="seperator-box">

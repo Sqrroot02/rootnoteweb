@@ -139,10 +139,9 @@ const ColorPicker = ({onColorChanged, className, width, height,isOpen, top, left
     }
 
     useEffect(() =>{
-        if (open === "collapse"){
+        if (isOpen === true){
             setOpen("visible");
             setOpacity(1);
-            console.log("xxx")
         }
         else {
             setOpen("collapse")
@@ -167,7 +166,7 @@ const ColorPicker = ({onColorChanged, className, width, height,isOpen, top, left
     }
 
     return(
-        <div className="outer-container1" style={{height: height, width: width, visibility: open, opacity: opacity, top:top, left:left }} onMouseLeave={onMouseLeave}>
+        <div className="outer-container1" style={{height: height, width: width, visibility: open, opacity: opacity, marginTop:top, left:left }} onMouseLeave={onMouseLeave}>
             <div className="inner-box1" style={{height: height, width: width, visibility: open, opacity: opacity }}>
                 <div className="picker-box1">
                     <canvas className="color-col1" ref={canvasColor} onMouseDown={mouseDownColor} onMouseMove={mouseMoveColor} onMouseUp={mouseUpColor}/>

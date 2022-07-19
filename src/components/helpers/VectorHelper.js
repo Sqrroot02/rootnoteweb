@@ -29,3 +29,11 @@ export function getLenght(vector) {
 export function degToRad(angle){
     return angle * (Math.PI/180);
 }
+
+export function getVectorAngle(vec1, vec2){
+    return Math.cos(dotProduct(vec1,vec2)/(getLenght(vec1) * getLenght(vec2)));
+}
+
+export function dotProduct(vec1, vec2){
+    return vec1.x * vec2.x + vec1.y * vec2.y;
+}

@@ -1,0 +1,8 @@
+.outer-container{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    background-color: #31353d;
+    border-radius: 5px;
+    padding: 5px;
+}

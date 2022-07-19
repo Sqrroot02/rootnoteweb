@@ -5,6 +5,7 @@
     background-color: #31353d;
     border-radius: 5px;
     padding: 5px;
+    height: 100px;
 }
 .DrawTypeDropDown{
     position: fixed;

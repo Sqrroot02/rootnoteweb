@@ -27,9 +27,11 @@ const DrawTab = ({setSelectedColor, setDrawType, setDrawSize}) => {
     function onDrawTypeClicked(){
         if (isDrawTypeVisible === true){
             setIsDrawTypeVisible(false);
+
         }
         else {
             setIsDrawTypeVisible(true);
+            setIsColorVisible(false);
         }
     }
 
@@ -39,6 +41,7 @@ const DrawTab = ({setSelectedColor, setDrawType, setDrawSize}) => {
         }
         else {
             setIsColorVisible(true);
+            setIsDrawTypeVisible(false)
         }
     }
 
@@ -70,7 +73,7 @@ const DrawTab = ({setSelectedColor, setDrawType, setDrawSize}) => {
                 </svg>
             </IconButton>
             <DrawTypeDropDown isOpen={isDrawTypeVisible} onSelectionChanged={handleDrawTypeChanged}/>
-            <ColorPicker onColorChanged={handleColorChanged} left={320} top={115} isOpen={isColorVisible} className="color-picker" width={400} height={600}/>
+            <ColorPicker onColorChanged={handleColorChanged} left={270} top={62} isOpen={isColorVisible} className="color-picker" width={400} height={600}/>
         </div>
 
     )
