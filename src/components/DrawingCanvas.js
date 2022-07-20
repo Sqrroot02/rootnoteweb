@@ -13,6 +13,8 @@ import {
     getDestinationArrayIndex,
     getRowIndex
 } from "./helpers/Graphics";
+import {getLenght} from "./helpers/VectorHelper";
+import Vector from "./helpers/Vector";
 
 const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, canvasWidth, canvasHeight, key}) => {
 
@@ -209,8 +211,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
             DrawRectangle(indexContextRef,startX,startY,endX,endY);
         }
         else if (drawType === DrawTypes.Circle){
-            DrawCircle(contextRef,startX- bounds.left,startY- bounds.top,endX-startX)
-            DrawCircle(indexContextRef,startX- bounds.left,startY- bounds.top,endX-startX)
+            DrawCircle(contextRef,startX,startY,getLenght(Vector(endX-startX,endY-startY)))
+            DrawCircle(indexContextRef,startX,startY,getLenght(Vector(endX-startX,endY-startY)))
         }
         else if (drawType === DrawTypes.Line){
             DrawLine(contextRef,startX - bounds.left,startY- bounds.top,endX,endY)
@@ -293,7 +295,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         }
         else if (drawType === DrawTypes.Circle){
             previewContextRef.current.clearRect(0,0,width,height)
-            DrawCircle(previewContextRef,startX,startY,endX-startX)
+            DrawCircle(previewContextRef,startX,startY,getLenght(Vector(endX-startX,endY-startY)))
         }
         else if (drawType === DrawTypes.Line){
             previewContextRef.current.clearRect(0,0,width,height)

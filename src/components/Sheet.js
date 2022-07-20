@@ -6,7 +6,7 @@ import "./Sheet.css"
 
 const Sheet = React.forwardRef(({drawSize, drawColor, drawType},ref) => {
 
-    const [items,setItems] = useState([{type: "p",className:"paragraph", style: {width:1000}, contentEditable:true, key: uuid(), content:"test"}]);
+    const [items,setItems] = useState([{type: "DrawingCanvas",key: uuid()}]);
 
 
     useImperativeHandle(ref, () =>({
@@ -21,18 +21,18 @@ const Sheet = React.forwardRef(({drawSize, drawColor, drawType},ref) => {
                 {
                     type: "DrawingCanvas",
                     key: uuid(),
-                }
-                ])
+                }])
         },
         addTable(){
-            items.push(
-                <table contentEditable={true} key={uuid()}/>
-            )
+            setItems(current => [...current,{
+                type: "table",
+                key: uuid(),
+            }])
         }
     }))
 
     const components = items.map((x) =>{
-        // Apppends new DrawingCanvas to DOM
+        // Appends new DrawingCanvas to DOM
         if (x.type === "DrawingCanvas"){
             return(
                 <div key={x.key}>
@@ -52,7 +52,6 @@ const Sheet = React.forwardRef(({drawSize, drawColor, drawType},ref) => {
         }
     })
 
-    //<DrawingCanvas  drawType={drawType} drawSize={drawSize}  />
     return(
         <div>
             {components}
