@@ -4,7 +4,7 @@ import DrawTab from "./DrawTab";
 import ElementsTab from "./ElementsTab";
 import "./TabSelector.css"
 
-const TabSelector = ({currentTab,setDrawColor, setDrawType, setDrawSize}) => {
+const TabSelector = ({currentTab,setDrawColor, setDrawType, setDrawSize, setDrawCanvas, setParagraph, setTable, setList}) => {
 
     const [tab,setTab] = useState(<DrawTab/>);
 
@@ -23,7 +23,7 @@ const TabSelector = ({currentTab,setDrawColor, setDrawType, setDrawSize}) => {
     }
 
     function addClick(){
-        setTab(<ElementsTab/>)
+        setTab(<ElementsTab setParagraph={setParagraph} setDrawCanvas={setDrawCanvas} setList={setList} setTable={setTable}/>)
     }
 
     return(

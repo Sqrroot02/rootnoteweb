@@ -14,12 +14,15 @@ import {
     getRowIndex
 } from "./helpers/Graphics";
 
-const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, canvasWidth, canvasHeight}) => {
+const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, canvasWidth, canvasHeight, key}) => {
 
     const [isMouseClicked, setMouseClicked] = useState(false); // Save current Mouse Click behavior
 
     const [startX, setStartX] = useState(0); // Start X
     const [startY, setStartY] = useState(0) // Start Y
+
+    const [scrollPosX, setScrollPosX] = useState(0);
+    const [scrollPosY, setScrollPosY] = useState(0)
 
     const [width, setWidth] = useState(1500);
     const [height, setHeight] = useState(1500);
@@ -40,7 +43,6 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
     const indexContextRef = useRef(null);
 
     const arrowAngle = 35;
-
 
     // on Color changed
     useEffect(() =>{
@@ -105,6 +107,11 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
 
         if (loaded === false){
             setLoaded(true);
+        }
+
+        window.addEventListener("scroll", scrollHandler, {passive: true})
+        return() =>{
+            window.removeEventListener("scroll", scrollHandler);
         }
 
     },[])
@@ -328,11 +335,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
     }
 
     const scrollHandler = (params) => {
-        contextRef.current.transform(1.2,0,0,1.2,0,0)
-        indexContextRef.current.transform(1.2,0,0,1.2,0,0)
 
-        redrawMainLayer()
-        redrawIndexLayer()
     }
 
     // Methode for returning pixel Data of a selected shape
@@ -435,7 +438,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         const boundX = params.clientX || params.touches[0].clientX
         const boundY = params.clientY || params.touches[0].clientY
         const x = boundX - params.target.offsetLeft
-        const y = boundY - params.target.offsetTop
+        const y = boundY - params.target.offsetTop + window.scrollY
 
         return{x, y}
     }
@@ -474,7 +477,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
 
 
     return(
-        <div>
+        <div className="outer-canvas-container">
             <canvas
                 onMouseDown={mouseDownHandler}
                 onMouseMove={mouseMoveHandler}

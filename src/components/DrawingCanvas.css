@@ -1,27 +1,27 @@
 .drawing-canvas{
     position: absolute;
     padding: 4px;
+    min-width: 200px;
+    min-height: 200px;
     z-index: 2;
-    top: 0;
-    left: 0;
     touch-action: none;
     image-rendering: high-quality;
 }
 .preview-canvas{
     position: absolute;
     padding: 4px;
+    min-width: 200px;
+    min-height: 200px;
     z-index: 1;
-    top: 0;
-    left: 0;
     touch-action: none;
     image-rendering: high-quality;
 }
 .index-canvas{
-    top: 0;
-    left: 0;
     visibility: hidden;
     position: absolute;
     padding: 4px;
+    min-width: 200px;
+    min-height: 200px;
     z-index: 0;
     touch-action: none;
     image-rendering: high-quality;

@@ -1,12 +1,13 @@
 import DrawTab from "./DrawTab";
 import DrawingCanvas from "./DrawingCanvas";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import DrawTypes from "./enums/DrawTypes";
 import "./EditorSpace.css"
 import {rgbToHex} from "./helpers/NumberConversion";
 import {TabTypes} from "./enums/TabTypes";
 import TabSelector from "./TabSelector";
-
+import Sheet from "./Sheet";
+import React from "react";
 
 const EditorSpace = (params) => {
 
@@ -16,14 +17,22 @@ const EditorSpace = (params) => {
     const [drawSize, setDrawSize] = useState(15);
     const [currentTab, setCurrentTab] = useState(TabTypes.DrawTab);
 
+    const sheetRef = useRef();
+
   return(
       <div>
           <div className="App-header">
               <header className="head-band">
                   <label className="App-Logo">Root Note</label>
-                  <TabSelector currentTab={TabTypes.DrawTab} setDrawType={setDrawType} setDrawSize={setDrawSize} setDrawColor={setDrawColor}/>
+                  <TabSelector
+                      currentTab={TabTypes.DrawTab}
+                      setDrawType={setDrawType}
+                      setDrawSize={setDrawSize}
+                      setDrawColor={setDrawColor}
+                      setParagraph={() => sheetRef.current.addParagraph()}
+                      setDrawCanvas={() => sheetRef.current.addCanvas()}/>
               </header>
-              <DrawingCanvas strokeColor={drawColor} drawType={drawType} drawSize={drawSize} canvasHeight={1500} canvasWidth={1500}/>
+              <Sheet ref={sheetRef} drawSize={drawSize} drawColor={drawColor} drawType={drawType}/>
           </div>
       </div>
 
@@ -31,4 +40,5 @@ const EditorSpace = (params) => {
 }
 
 export default EditorSpace
+
 

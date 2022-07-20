@@ -1,0 +1,20 @@
+.paragraph{
+    margin-left: 10px;
+    margin-top: 5px;
+    transition: all 0.3s;
+    border-radius: 5px;
+    border-color: transparent;
+    outline: transparent;
+    padding: 5px;
+}
+
+.paragraph:focus{
+    background-color: #5e5e5e;
+}
+
+.paragraph:scope{
+    border-color: transparent;
+}
+.paragraph:hover{
+    background-color: #5e5e5e;
+}
