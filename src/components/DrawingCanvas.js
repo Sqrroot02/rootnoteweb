@@ -68,8 +68,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
     // init Effect
     useEffect(() =>{
         const canvas = canvasRef.current;
-        canvas.width = 1500;
-        canvas.height = 1500;
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
 
         const context = canvas.getContext("2d");
         contextRef.current = context;
@@ -82,8 +82,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         contextRef.current.translate(0.5,0.5);
 
         const prevCanvas = previewCanvasRef.current;
-        prevCanvas.width = 1500;
-        prevCanvas.height = 1500;
+        prevCanvas.width = canvasWidth;
+        prevCanvas.height = canvasHeight;
 
         const prevContext = prevCanvas.getContext("2d");
         previewContextRef.current = prevContext;
@@ -96,8 +96,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         previewContextRef.current.translate(0.5,0.5);
 
         const inCanavas = indexCanvasRef.current;
-        inCanavas.width = 1500;
-        inCanavas.height = 1500;
+        inCanavas.width = canvasWidth;
+        inCanavas.height = canvasHeight;
 
         const inContext = inCanavas.getContext("2d");
         indexContextRef.current = inContext;
@@ -110,12 +110,6 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         if (loaded === false){
             setLoaded(true);
         }
-
-        window.addEventListener("scroll", scrollHandler, {passive: true})
-        return() =>{
-            window.removeEventListener("scroll", scrollHandler);
-        }
-
     },[])
 
 
@@ -336,10 +330,6 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         params.preventDefault();
     }
 
-    const scrollHandler = (params) => {
-
-    }
-
     // Methode for returning pixel Data of a selected shape
     const getSameColorsPixels = (data,color) =>{
         const founded = []
@@ -487,7 +477,6 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
                 onTouchStart={mouseDownHandler}
                 onTouchMove={mouseMoveHandler}
                 onTouchEnd={mouseUpHandler}
-                onScroll={scrollHandler}
                 ref={canvasRef}
                 id="drawing-canvas"
                 className="drawing-canvas"/>

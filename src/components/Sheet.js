@@ -3,6 +3,8 @@ import uuid from "react-uuid"
 import DrawingCanvas from "./DrawingCanvas";
 import React from "react";
 import "./Sheet.css"
+import "./EditableTable";
+import EditableTable from "./EditableTable";
 
 const Sheet = React.forwardRef(({drawSize, drawColor, drawType},ref) => {
 
@@ -24,10 +26,11 @@ const Sheet = React.forwardRef(({drawSize, drawColor, drawType},ref) => {
                 }])
         },
         addTable(){
-            setItems(current => [...current,{
-                type: "table",
-                key: uuid(),
-            }])
+            setItems(current => [...current,
+                {
+                    type: "EditableTable",
+                    key: uuid(),
+                }])
         }
     }))
 
@@ -36,7 +39,14 @@ const Sheet = React.forwardRef(({drawSize, drawColor, drawType},ref) => {
         if (x.type === "DrawingCanvas"){
             return(
                 <div key={x.key}>
-                    <DrawingCanvas drawType={drawType} drawSize={drawSize} strokeColor={drawColor}/>
+                    <DrawingCanvas canvasWidth={500} canvasHeight={500} drawType={drawType} drawSize={drawSize} strokeColor={drawColor}/>
+                </div>
+            )
+        }
+        else if (x.type === "EditableTable"){
+            return (
+                <div key={x.key}>
+                    <EditableTable ref={null}/>
                 </div>
             )
         }

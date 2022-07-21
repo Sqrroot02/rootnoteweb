@@ -11,6 +11,7 @@
     transition-timing-function: ease-out;
     padding: 7px;
     margin: 3px;
+    vertical-align: middle;
 }
 
 #button-front:hover{

@@ -27,3 +27,7 @@
     image-rendering: high-quality;
 }
 
+.outer-canvas-container{
+    margin-left: 10px;
+}
+
