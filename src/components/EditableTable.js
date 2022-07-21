@@ -9,10 +9,21 @@ const EditableTable = React.forwardRef((props, ref) => {
     const [selectedRow,setSelectedRow] = useState(0)
     const [selectedColumn, setSelectedColumn] = useState(0)
 
-    const [tableRows, setTableRows] = useState([])
+    const [tableRows, setTableRows] = useState([
+        {
+            id:uuid(),
+            columns:[
+                {
+                    id:uuid(),
+                    className:"table-cell",
+                    content:null
+                }
+            ]
+        }
+    ])
     const [columnCount, setColumnCount] = useState(1)
 
-    const [tableContent, setTableContent] = useState([])
+    const [tableContent, setTableContent] = useState()
     const [selectedCell, setSelectedCell] = useState(null)
 
     const bodyRef = useRef()
@@ -33,52 +44,81 @@ const EditableTable = React.forwardRef((props, ref) => {
     }))
 
     function addRow() {
-        let columns = createColumns()
+        console.log(tableRows)
         let id = uuid()
         setTableRows(prev => [...prev,
-            <tr id={id}>
-                {columns}
-            </tr>
+            {
+                id:uuid(),
+                columns: createColumns()
+            }
         ])
     }
 
     function addColumn() {
         tableRows.map(x => {
-            let id = uuid()
-            console.log(x);
-            x.props.children.push(
-                <td contentEditable={true} id={id} key={id}  style={{height: 50, width: 100}} className="table-cell"></td>
+            x.columns.push(
+                {
+                    id:uuid(),
+                    className:"table-cell",
+                    content:null
+                }
             )
         })
-        setTableRows(tableRows);
+        //setTableRows(tableRows);
         setColumnCount(columnCount+1);
     }
 
     const createColumns = () =>{
         let columns = []
         for (let i = 0; i < columnCount; i++) {
-            let id = uuid()
             columns.push(
-                <td contentEditable={true} id={id} key={id}  style={{height: 50, width: 100}} className="table-cell"></td>
+                {
+                    id:uuid(),
+                    className:"table-cell",
+                    content:null
+                }
             )
         }
         return columns;
     }
 
+    const oninputChanged = (params) => {
+        const rowId = params.target.parentElement.id;
+        const colId = params.target.id;
+
+        tableRows.find(x => x.id === rowId).columns.find(y => y.id === colId).content = params.target.textContent;
+
+        console.log(params)
+    }
+
     return(
         <div className="outer-table-container">
             <div className="options-container">
-                <p className="table-title" contentEditable={true}/>
-                <IconButton onClick={addRow}>
-                    <img src="./icons/add-row-solid.svg"/>
-                </IconButton>
-                <IconButton onClick={addColumn}>
-                    <img src="./icons/add-column-solid.svg"/>
-                </IconButton>
+                <input className="table-title" contentEditable={true}/>
+                <div className="hidden-table-options">
+                    <IconButton onClick={addRow}>
+                        <img src="./icons/add-row-solid.svg"/>
+                    </IconButton>
+                    <IconButton onClick={addColumn}>
+                        <img src="./icons/add-column-solid.svg"/>
+                    </IconButton>
+                </div>
             </div>
             <table key={uuid()} className="table-main">
                 <tbody ref={bodyRef} id="table-body-root">
-                    {tableRows}
+                    {
+                        tableRows.map(x => (
+                            <tr id={x.id}>
+                                {
+                                    x.columns.map(y => (
+                                        <td onInput={oninputChanged} id={y.id} className={y.className} contentEditable={true}>
+                                            {y.content}
+                                        </td>
+                                    ))
+                                }
+                            </tr>
+                        ))
+                    }
                 </tbody>
             </table>
         </div>
