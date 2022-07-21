@@ -13,6 +13,7 @@
 
 .table-main{
     border-collapse: collapse;
+    margin-top: 5px;
 }
 
 .outer-table-container{
@@ -61,8 +62,21 @@
     padding: 5px;
     border-radius: 5px;
     border-color: transparent;
+    transition: all 0.2s;
+    outline: transparent;
 }
 
 .table-title:hover{
-    background-color: #5e5e5e;
+    border: 2px solid #5e5e5e;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    outline: transparent;
+}
+
+.table-title:focus{
+    border: 2px solid #5b64e7;
+    outline: none;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    outline: transparent;
 }
