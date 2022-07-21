@@ -5,6 +5,7 @@ import React from "react";
 import "./Sheet.css"
 import "./EditableTable";
 import EditableTable from "./EditableTable";
+import EditableList from "./EditableList";
 
 const Sheet = React.forwardRef(({drawSize, drawColor, drawType},ref) => {
 
@@ -31,6 +32,13 @@ const Sheet = React.forwardRef(({drawSize, drawColor, drawType},ref) => {
                     type: "EditableTable",
                     key: uuid(),
                 }])
+        },
+        addList(){
+            setItems(current => [...current,
+                {
+                    type: "EditableList",
+                    key: uuid()
+                }])
         }
     }))
 
@@ -47,6 +55,13 @@ const Sheet = React.forwardRef(({drawSize, drawColor, drawType},ref) => {
             return (
                 <div key={x.key}>
                     <EditableTable ref={null}/>
+                </div>
+            )
+        }
+        else if (x.type === "EditableList"){
+            return (
+                <div key={x.key}>
+                    <EditableList/>
                 </div>
             )
         }

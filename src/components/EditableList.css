@@ -1,0 +1,32 @@
+.radio-input{
+    appearance: none;
+}
+
+.radio-input:checked ~ .radio-fake{
+    background-color: #5b64e7;
+}
+
+.radio-fake{
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #b2bdcb;
+    background-color: transparent;
+    vert-align: middle;
+    margin-right: 5px;
+}
+
+
+.radio-label{
+    font-size: 18px;
+    color: #b2bdcb;
+}
+
+.radio-box{
+    display: flex;
+    flex-direction: row;
+    child-align: middle;
+    vert-align: middle;
+}

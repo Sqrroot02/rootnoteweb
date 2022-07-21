@@ -31,7 +31,8 @@ const EditorSpace = (params) => {
                       setDrawColor={setDrawColor}
                       setParagraph={() => sheetRef.current.addParagraph()}
                       setDrawCanvas={() => sheetRef.current.addCanvas()}
-                      setTable={() => sheetRef.current.addTable()}/>
+                      setTable={() => sheetRef.current.addTable()}
+                      setList={() => sheetRef.current.addList()}/>
               </header>
               <Sheet ref={sheetRef} drawSize={drawSize} drawColor={drawColor} drawType={drawType}/>
           </div>
