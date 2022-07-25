@@ -1,0 +1,47 @@
+.radio-default{
+    position: absolute;
+    visibility: visible;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 33;
+}
+
+.radio-button-container{
+    display: block;
+    position: relative;
+    cursor: pointer;
+    margin-bottom: 12px;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    z-index: 32;
+}
+
+.radio-button-dot{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: transparent;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #b2bdcb;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.radio-default:checked ~ .radio-button-dot{
+    background-color: #5b64e7;
+}
+
+.radio-button-container:hover .radio-button-dot,.radio-default{
+    transform: scale(105%);
+}
+.radio-button-container:hover:checked .radio-button-dot{
+    background-color: #5b64e7;
+}
+
+
+
+

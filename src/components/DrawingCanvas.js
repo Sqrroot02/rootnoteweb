@@ -469,23 +469,29 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
 
 
     return(
-        <div className="outer-canvas-container">
-            <canvas
-                onMouseDown={mouseDownHandler}
-                onMouseMove={mouseMoveHandler}
-                onMouseUp={mouseUpHandler}
-                onTouchStart={mouseDownHandler}
-                onTouchMove={mouseMoveHandler}
-                onTouchEnd={mouseUpHandler}
-                ref={canvasRef}
-                id="drawing-canvas"
-                className="drawing-canvas"/>
-            <canvas ref={previewCanvasRef}
-                id="preview-canvas"
-                className="preview-canvas-canvas"/>
-            <canvas className="index-canvas"
-                    id="index-canvas"
-                    ref={indexCanvasRef}/>
+        <div style={{display: "flex", flexDirection:"column"}}>
+           <div style={{display: "flex", flexDirection:"row"}}>
+               <div className="outer-canvas-container">
+                   <canvas
+                       onMouseDown={mouseDownHandler}
+                       onMouseMove={mouseMoveHandler}
+                       onMouseUp={mouseUpHandler}
+                       onTouchStart={mouseDownHandler}
+                       onTouchMove={mouseMoveHandler}
+                       onTouchEnd={mouseUpHandler}
+                       ref={canvasRef}
+                       id="drawing-canvas"
+                       className="drawing-canvas"/>
+                   <canvas ref={previewCanvasRef}
+                           id="preview-canvas"
+                           className="preview-canvas-canvas"/>
+                   <canvas className="index-canvas"
+                           id="index-canvas"
+                           ref={indexCanvasRef}/>
+               </div>
+               <div className="thumb-right" style={{width:10, background:"blue"}}/>
+           </div>
+            <div className="thumb-bottom" style={{height:10, background:"blue"}}/>
         </div>
     );
 }
