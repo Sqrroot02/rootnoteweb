@@ -31,3 +31,23 @@
     margin-left: 10px;
 }
 
+.thumb-right:hover{
+    background-color: #b2bdcb;
+    transform: scaleX(1.25);
+}
+
+.thumb-right{
+    background-color: #5e5e5e;
+    transition: all 0.2s;
+}
+
+.thumb-bottom:hover{
+    background-color: #b2bdcb;
+    transform: scaleY(1.25);
+}
+
+.thumb-bottom{
+    background-color: #5e5e5e;
+    transition: all 0.2s;
+}
+

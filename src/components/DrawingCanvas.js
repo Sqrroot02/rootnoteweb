@@ -26,8 +26,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
     const [scrollPosX, setScrollPosX] = useState(0);
     const [scrollPosY, setScrollPosY] = useState(0)
 
-    const [width, setWidth] = useState(1500);
-    const [height, setHeight] = useState(1500);
+    const [width, setWidth] = useState(600);
+    const [height, setHeight] = useState(600);
 
     const [colorIndex, setColorIndex] = useState(256);  // Current shape Index
     const [selectedShape, setSelectedShape] = useState();   // Current selected Shape
@@ -45,6 +45,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
     const indexContextRef = useRef(null);
 
     const arrowAngle = 35;
+    const [oldCanvasWidth, setOldCanvasWidth] = useState(width);
 
     // on Color changed
     useEffect(() =>{
@@ -68,8 +69,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
     // init Effect
     useEffect(() =>{
         const canvas = canvasRef.current;
-        canvas.width = canvasWidth;
-        canvas.height = canvasHeight;
+        canvas.width = width;
+        canvas.height = height;
 
         const context = canvas.getContext("2d");
         contextRef.current = context;
@@ -82,8 +83,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         contextRef.current.translate(0.5,0.5);
 
         const prevCanvas = previewCanvasRef.current;
-        prevCanvas.width = canvasWidth;
-        prevCanvas.height = canvasHeight;
+        prevCanvas.width = width;
+        prevCanvas.height = height;
 
         const prevContext = prevCanvas.getContext("2d");
         previewContextRef.current = prevContext;
@@ -96,8 +97,8 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         previewContextRef.current.translate(0.5,0.5);
 
         const inCanavas = indexCanvasRef.current;
-        inCanavas.width = canvasWidth;
-        inCanavas.height = canvasHeight;
+        inCanavas.width = width;
+        inCanavas.height = height;
 
         const inContext = inCanavas.getContext("2d");
         indexContextRef.current = inContext;
@@ -303,7 +304,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
             previewContextRef.current.clearRect(0,0,width,height)
             DrawTriangle(previewContextRef,startX- bounds.left,startY-bounds.top,endX,endY);
         }
-        // Makes a Shape moveable
+        // Makes a Shape movable
         else if (drawType === DrawTypes.None && selectedShape !== undefined){
             previewContextRef.current.clearRect(0,0,width,height)
 
@@ -467,9 +468,68 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         return pixels
     }
 
+    function thumbBottomDragMove(params){
+        if (params.clientY !== 0){
+            setHeight(params.clientY - canvasRef.current.getBoundingClientRect().top)
+
+            const canvas = canvasRef.current;
+            canvas.height = height;
+
+            const prevCanvas = previewCanvasRef.current;
+            prevCanvas.height = height;
+
+            const inCanavas = indexCanvasRef.current;
+            inCanavas.height = height;
+        }
+    }
+
+    function thumbRightDragMove(params) {
+        if (params.clientX !== 0){
+            setWidth(params.clientX - canvasRef.current.getBoundingClientRect().left)
+
+            const canvas = canvasRef.current;
+            canvas.width = width;
+
+            const prevCanvas = previewCanvasRef.current;
+            prevCanvas.width = width;
+
+            const inCanvas = indexCanvasRef.current;
+            inCanvas.width = width;
+
+        }
+    }
+
+    function thumbRightDragEnd(params){
+        reTransformShapes(width,oldCanvasWidth)
+        redrawMainLayer()
+    }
+
+    function thumbBottomDragEnd(params){
+        redrawMainLayer()
+    }
+
+    function thumbRightDragStart(params){
+        setOldCanvasWidth(width)
+        console.log(width)
+    }
+
+
+
+    function reTransformShapes(newCol,oldWidth){
+        console.log(newCol, oldWidth)
+        for (let i = 0; i < shapes.length; i++) {
+            for (let j = 0; j < shapes[i].Pixels.length; j++) {
+                let row = getRowIndex(shapes[i].Pixels[j],oldWidth)
+                let col = getColIndex(shapes[i].Pixels[j],oldWidth)
+                shapes[i].Pixels[j] = getDestinationArrayIndex(row,col,newCol);
+            }
+        }
+    }
+
+
 
     return(
-        <div style={{display: "flex", flexDirection:"column"}}>
+        <div style={{display: "flex", flexDirection:"column", height:height + 20, width:width + 20}}>
            <div style={{display: "flex", flexDirection:"row"}}>
                <div className="outer-canvas-container">
                    <canvas
@@ -489,9 +549,9 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
                            id="index-canvas"
                            ref={indexCanvasRef}/>
                </div>
-               <div className="thumb-right" style={{width:10, background:"blue"}}/>
+               <div onDragEnd={thumbRightDragEnd} onDragStart={thumbRightDragStart} draggable={true} className="thumb-right" onDrag={thumbRightDragMove} style={{width:20}}/>
            </div>
-            <div className="thumb-bottom" style={{height:10, background:"blue"}}/>
+            <div onDragEnd={thumbBottomDragEnd} draggable={true} className="thumb-bottom" onDrag={thumbBottomDragMove} style={{height:10}}/>
         </div>
     );
 }
