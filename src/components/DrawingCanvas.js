@@ -44,8 +44,9 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
     const indexCanvasRef = useRef(null); // third-Layer canvas
     const indexContextRef = useRef(null);
 
-    const arrowAngle = 35;
     const [oldCanvasWidth, setOldCanvasWidth] = useState(width);
+
+    const arrowAngle = 35;
 
     // on Color changed
     useEffect(() =>{
@@ -68,45 +69,7 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
 
     // init Effect
     useEffect(() =>{
-        const canvas = canvasRef.current;
-        canvas.width = width;
-        canvas.height = height;
-
-        const context = canvas.getContext("2d");
-        contextRef.current = context;
-        contextRef.current.lineCap = "round";
-        contextRef.current.lineJoin = "round"
-        contextRef.current.strokeStyle = strokeColor;
-        contextRef.current.fillStyle = strokeColor;
-        contextRef.current.lineWidth = 15;
-        contextRef.current.imageSmoothingEnabled = true;
-        contextRef.current.translate(0.5,0.5);
-
-        const prevCanvas = previewCanvasRef.current;
-        prevCanvas.width = width;
-        prevCanvas.height = height;
-
-        const prevContext = prevCanvas.getContext("2d");
-        previewContextRef.current = prevContext;
-        previewContextRef.current.lineCap = "round";
-        previewContextRef.current.lineJoin = "round"
-        previewContextRef.current.strokeStyle = strokeColor;
-        previewContextRef.current.fillStyle = strokeColor;
-        previewContextRef.current.lineWidth = 15;
-        previewContextRef.current.imageSmoothingEnabled = true;
-        previewContextRef.current.translate(0.5,0.5);
-
-        const inCanavas = indexCanvasRef.current;
-        inCanavas.width = width;
-        inCanavas.height = height;
-
-        const inContext = inCanavas.getContext("2d");
-        indexContextRef.current = inContext;
-        indexContextRef.current.lineWidth = 15;
-        indexContextRef.current.lineCap = "round";
-        indexContextRef.current.lineJoin = "round"
-        indexContextRef.current.imageSmoothingEnabled = true;
-        indexContextRef.current.translate(0.5,0.5);
+        applySettings()
 
         if (loaded === false){
             setLoaded(true);
@@ -415,7 +378,6 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         indexContextRef.current.putImageData(imageData,0,0)
     }
 
-
     // Returns an RGB combination from a Hex value
     const hexToRGB = (hex) => {
         let aRgbHex = hex.match(/.{1,2}/g);
@@ -501,20 +463,22 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
 
     function thumbRightDragEnd(params){
         reTransformShapes(width,oldCanvasWidth)
+        applySettings()
         redrawMainLayer()
     }
 
     function thumbBottomDragEnd(params){
+        applySettings()
         redrawMainLayer()
     }
 
+    // Thumb Right Start
     function thumbRightDragStart(params){
         setOldCanvasWidth(width)
         console.log(width)
     }
 
-
-
+    // Adjusts Pixel positions to new Bounds
     function reTransformShapes(newCol,oldWidth){
         console.log(newCol, oldWidth)
         for (let i = 0; i < shapes.length; i++) {
@@ -526,8 +490,50 @@ const DrawingCanvas = ({strokeColor, drawType, drawSize, selectedShapeChanged, c
         }
     }
 
+    // General Settings for all Canvas Elements
+    function applySettings(){
+        const canvas = canvasRef.current;
+        canvas.width = width;
+        canvas.height = height;
 
+        const context = canvas.getContext("2d");
+        contextRef.current = context;
+        contextRef.current.lineCap = "round";
+        contextRef.current.lineJoin = "round"
+        contextRef.current.strokeStyle = strokeColor;
+        contextRef.current.fillStyle = strokeColor;
+        contextRef.current.lineWidth = 15;
+        contextRef.current.imageSmoothingEnabled = true;
+        contextRef.current.translate(0.5,0.5);
 
+        const prevCanvas = previewCanvasRef.current;
+        prevCanvas.width = width;
+        prevCanvas.height = height;
+
+        const prevContext = prevCanvas.getContext("2d");
+        previewContextRef.current = prevContext;
+        previewContextRef.current.lineCap = "round";
+        previewContextRef.current.lineJoin = "round"
+        previewContextRef.current.strokeStyle = strokeColor;
+        previewContextRef.current.fillStyle = strokeColor;
+        previewContextRef.current.lineWidth = 15;
+        previewContextRef.current.imageSmoothingEnabled = true;
+        previewContextRef.current.translate(0.5,0.5);
+
+        const inCanavas = indexCanvasRef.current;
+        inCanavas.width = width;
+        inCanavas.height = height;
+
+        const inContext = inCanavas.getContext("2d");
+        indexContextRef.current = inContext;
+        indexContextRef.current.lineWidth = 15;
+        indexContextRef.current.lineCap = "round";
+        indexContextRef.current.lineJoin = "round"
+        indexContextRef.current.imageSmoothingEnabled = true;
+        indexContextRef.current.translate(0.5,0.5);
+    }
+
+    // Layout return
     return(
         <div style={{display: "flex", flexDirection:"column", height:height + 20, width:width + 20}}>
            <div style={{display: "flex", flexDirection:"row"}}>

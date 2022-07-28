@@ -41,6 +41,9 @@ const EditableList = (params) => {
             params.preventDefault()
             addListSubElement();
         }
+        else {
+            listElements.find(x => x.id === params.target.id).content = params.target.textContent
+        }
     }
 
     function focusOnLoad(params){
@@ -54,7 +57,7 @@ const EditableList = (params) => {
                 <ul id={listId}>
                     {
                         listElements.map(x =>
-                            <li className="list-element"  onKeyDown={keyboardListener} onFocus={focusOnListElement} contentEditable={true} id={x.id}>
+                            <li className="list-element" onKeyDown={keyboardListener} onFocus={focusOnListElement} contentEditable={true} id={x.id}>
                                 {x.content}
                             </li>
                         )

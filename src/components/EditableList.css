@@ -2,6 +2,9 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    transition: all 0.2s;
+    margin-left: 200px;
+    opacity: 0;
 }
 
 .list-type-selection > label{
@@ -25,4 +28,9 @@
 
 .list-element:hover{
     transform: scale(1.01);
+}
+
+.outer-table-container:hover .list-type-selection{
+    opacity: 1;
+    margin-left: 30px;
 }
