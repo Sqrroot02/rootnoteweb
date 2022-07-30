@@ -6,6 +6,7 @@
     border-color: transparent;
     outline: transparent;
     padding: 5px;
+    overflow: scroll;
 }
 
 .paragraph:focus{
@@ -17,4 +18,8 @@
 }
 .paragraph:hover{
     background-color: #5e5e5e;
+}
+.sheet-border{
+    overflow: scroll;
+    margin-bottom: 1px;
 }

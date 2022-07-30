@@ -1,0 +1,33 @@
+.library-list-item{
+    height: 40px;
+    font-size: 12px;
+    color: #343941;
+    display: block;
+    width: 200px;
+    margin: 5px;
+    border-radius: 5px;
+    background-color: #5b64e7;
+}
+
+.library-outer-border{
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-bottom: 1px;
+}
+
+.library-list-element{
+    display: flex;
+    flex-direction: column;
+}
+
+.library-options{
+    height: 100px;
+    margin-bottom: 1px;
+}
+
+.library-list{
+    overflow: scroll;
+    height: 100%;
+}

@@ -4,7 +4,7 @@ import IconButton from "./IconButton";
 import React from "react";
 import "./EditableTable.css";
 
-const EditableTable = React.forwardRef(({removeTable}, ref) => {
+const EditableTable = React.forwardRef(({removeTable,onChange}, ref) => {
 
     const [tableRows, setTableRows] = useState([
         {
@@ -55,6 +55,9 @@ const EditableTable = React.forwardRef(({removeTable}, ref) => {
         },
         removeRow(){
             remRow()
+        },
+        getData(){
+            return tableRows;
         }
     }))
 
@@ -76,6 +79,7 @@ const EditableTable = React.forwardRef(({removeTable}, ref) => {
         elements.splice(index,1)
 
         setTableRows(elements)
+        onChange();
     }
 
     // Appends a row to the Context Table
@@ -90,6 +94,7 @@ const EditableTable = React.forwardRef(({removeTable}, ref) => {
             )
         })
         setColumnCount(columnCount+1);
+        onChange();
     }
 
     // Removes a Column from the Context Table
@@ -104,6 +109,7 @@ const EditableTable = React.forwardRef(({removeTable}, ref) => {
         }
         setTableRows(rows)
         setColumnCount(columnCount-1)
+        onChange();
     }
 
     // Creates a new Column for a new Row
@@ -118,6 +124,7 @@ const EditableTable = React.forwardRef(({removeTable}, ref) => {
                 }
             )
         }
+        onChange();
         return columns;
     }
 
@@ -127,8 +134,7 @@ const EditableTable = React.forwardRef(({removeTable}, ref) => {
         const colId = params.target.id;
 
         tableRows.find(x => x.id === rowId).columns.find(y => y.id === colId).content = params.target.textContent;
-
-        console.log(params)
+        onChange();
     }
 
     // Saves the current selected cell

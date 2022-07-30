@@ -17,6 +17,7 @@
     image-rendering: high-quality;
 }
 .index-canvas{
+    appearance: none;
     visibility: hidden;
     position: absolute;
     padding: 4px;

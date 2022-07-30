@@ -4,6 +4,10 @@
   font-family: "Roboto Light";
 }
 
+body{
+  overflow: hidden;
+}
+
 *{
   font-family: "Microsoft JhengHei UI"
 }

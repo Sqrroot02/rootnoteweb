@@ -8,6 +8,7 @@ import {TabTypes} from "./enums/TabTypes";
 import TabSelector from "./TabSelector";
 import Sheet from "./Sheet";
 import React from "react";
+import LibraryTree from "./libary/LibaryTree";
 
 const EditorSpace = (params) => {
 
@@ -34,7 +35,10 @@ const EditorSpace = (params) => {
                       setTable={() => sheetRef.current.addTable()}
                       setList={() => sheetRef.current.addList()}/>
               </header>
-              <Sheet ref={sheetRef} drawSize={drawSize} drawColor={drawColor} drawType={drawType}/>
+              <div style={{display: "flex", flexDirection: "row", overflow:"hidden", height:"80vh", width:"100vw"}}>
+                  <LibraryTree/>
+                  <Sheet ref={sheetRef} drawSize={drawSize} drawColor={drawColor} drawType={drawType}/>
+              </div>
           </div>
       </div>
 

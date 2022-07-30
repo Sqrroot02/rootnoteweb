@@ -1,10 +1,10 @@
-import {useRef, useState} from "react";
+import {useImperativeHandle, useRef, useState} from "react";
 import "./EditableList.css"
 import React from "react";
 import CustomRadioButton from "./controls/RadioButton";
 import uuid from "react-uuid";
 
-const EditableList = (params) => {
+const EditableList = React.forwardRef(({params,onChange},ref) => {
     const [listElements, setListElements] = useState([
         {
             content: null,
@@ -15,6 +15,13 @@ const EditableList = (params) => {
     const [selectedElement, setSelectedElement] = useState(null)
     const listId = uuid();
 
+    useImperativeHandle(ref, () => ({
+        getData(){
+            return listElements;
+        }
+    }))
+
+
     function addListSubElement(id){
         const newId = id
 
@@ -24,10 +31,11 @@ const EditableList = (params) => {
         elements.splice(index,0,{content: null, id: newId})
 
         setListElements(elements)
+        onChange();
     }
 
     function removeListSubElement(){
-
+        onChange();
     }
 
     function focusOnListElement(params){
@@ -39,10 +47,11 @@ const EditableList = (params) => {
             const newId = uuid()
 
             params.preventDefault()
-            addListSubElement();
+            addListSubElement(newId);
         }
         else {
             listElements.find(x => x.id === params.target.id).content = params.target.textContent
+            onChange();
         }
     }
 
@@ -82,6 +91,7 @@ const EditableList = (params) => {
 
     function onTypeChanged(params){
         setListType(params.target.value)
+        onChange();
     }
 
     return(
@@ -102,6 +112,6 @@ const EditableList = (params) => {
             </div>
         </div>
     )
-}
+})
 
 export default EditableList
