@@ -1,12 +1,25 @@
 .library-list-item{
-    height: 40px;
-    font-size: 12px;
     color: #343941;
     display: block;
     width: 200px;
-    margin: 5px;
-    border-radius: 5px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    border-radius: 4px 8px 4px 8px;
     background-color: #5b64e7;
+    transition: all 0.2s;
+    font-size: 14px;
+    child-align: middle;
+}
+
+.library-list-item-tag{
+    margin-left: 3px;
+    color: #b2bdcb;
+    font-weight: bold;
+}
+
+.library-list-item:hover{
+    transform: translate(-12px);
 }
 
 .library-outer-border{

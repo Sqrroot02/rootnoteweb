@@ -4,6 +4,10 @@ import {useEffect, useState} from "react";
 
 function App() {
 
+  useEffect(() => {
+    document.title = "Root Note"
+  })
+
   return (
       <EditorSpace/>
 
